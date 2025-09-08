@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Canara EC Bus Live Tracker</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+  <script src="https://apis.mapmyindia.com/advancedmaps/v1/aacf0bd69f0bb4bca986028798783f66/map_load?v=1.5"></script>
+</head>
+<body>
+  <div class="header">
+    <div class="logo">CEC Bus Tracker</div>
+    <button class="menu-button" id="menuButton">☰</button>
+    <div class="user-profile">
+      <span id="userName">Welcome</span>
+      <button id="logoutBtn">Logout</button>
+    </div>
+    <div class="status">
+      <div class="status-dot"></div>
+      <span>Live Tracking Active</span>
+    </div>
+  </div>
+  <div class="menu-overlay" id="menuOverlay"></div>
+  <div class="menu-panel" id="menuPanel">
+    <button class="menu-close" id="menuClose">✕</button>
+    <h2>Menu</h2>
+    <div class="menu-section">
+      <h3>My Preferences</h3>
+      <form id="menuPreferencesForm" class="menu-form">
+        <div class="form-group">
+          <label for="menuStopSelect">My Stop:</label>
+          <select id="menuStopSelect">
+            <option value="">Select your stop</option>
+          </select>
+        </div>      
+        <div class="form-group menu-checkbox">
+          <input type="checkbox" id="menuNotificationsEnabled">
+          <label for="menuNotificationsEnabled">Enable call warnings</label>
+        </div>
+        <button type="button" id="savePreferencesBtn" class="menu-save-btn">Save Changes</button>
+        <div class="menu-status" id="menuSaveStatus"></div>
+      </form>
+    </div> 
+    <ul class="menu-list">
+      <li><button id="menuStops"><i>🚏</i> Bus Stops</button></li>
+      <li><button id="menuSettings"><i>⚙️</i> Settings</button></li>
+    </ul>   
+  <div class="about-section">
+      <h3>About CEC Bus Tracker</h3>
+      <p>Live tracking application for Canara Engineering College buses. Get real-time updates and notifications when your bus is approaching.</p>
+      <p>Version 1.0</p>
+    </div>
+  </div> 
+  <div class="loading" id="loading">Updating Location...</div>
+  <div id="map"></div>
+  
+  <!-- mobile dha-->
+  <div class="bottom-info-bar">
+    <div class="info-item">
+      <span class="info-label">Current Speed:</span>
+      <span class="info-value" id="speedMobile">-- km/h</span>
+    </div>
+    <div class="info-item">
+      <span class="info-label">Next Stop:</span>
+      <span class="info-value" id="nextStopMobile">--</span>
+    </div>
+    <div class="info-item">
+      <span class="info-label">ETA to College:</span>
+      <span class="info-value" id="etaMobile">-- min</span>
+    </div>
+  </div>
+  
+  <div class="info-panel panel" id="infoPanel">
+    <h3>Bus Information</h3>
+    <div class="info-item">
+      <span class="info-label">Current Speed:</span>
+      <span class="info-value" id="speed">-- km/h</span>
+    </div>
+    <div class="info-item">
+      <span class="info-label">Next Stop:</span>
+      <span class="info-value" id="nextStop">--</span>
+    </div>
+    <div class="info-item">
+      <span class="info-label">ETA to College:</span>
+      <span class="info-value" id="eta">-- min</span>
+    </div>
+  </div>
+  <div class="stop-info-panel panel" id="stopInfoPanel">
+    <h3 id="stopToggle" style="cursor: pointer;">Stop Information &#9660;</h3>
+    <ul id="stopList" class="collapsed"></ul>
+  </div>
+  <div class="notification-panel panel" id="notificationPanel">
+    <h3>Stop Notification</h3>
+    <form class="notification-form">
+      <select id="stopSelect">
+        <option value="">Select a stop for notification</option>
+      </select>
+      <input type="tel" id="phoneNumber" placeholder="Phone Number" readonly>
+      <div class="notification-toggle">
+        <label for="notificationsEnabled">Enable Call Notifications</label>
+        <input type="checkbox" id="notificationsEnabled">
+      </div>
+      <button type="button" id="notifyBtn">Update Preferences</button>
+    </form>
+    <div id="notificationStatus" class="notification-status"></div>
+  </div>
+  
+  <!-- mobile -->
+  <div class="mobile-controls">
+    <button id="infoPanelToggle" title="Bus Info"><i>🚌</i></button>
+    <button id="stopsPanelToggle" title="Stops"><i>🚏</i></button>
+    <button id="notificationPanelToggle" title="Notifications"><i>📢</i></button>
+  </div>
+  
+  <script src="script.js"></script>
+</body>
+</html>
+

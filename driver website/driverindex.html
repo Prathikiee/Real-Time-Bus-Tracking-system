@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Driver Location Sharing</title>
+  <style>
+    body { 
+      font-family: Arial, sans-serif;
+       padding: 20px;
+       }
+    input, button {
+       padding: 10px; margin: 5px 0;
+       }
+  </style>
+</head>
+<body>
+  <h1>Driver Location Sharing</h1>
+  <input type="text" id="driverId" placeholder="Driver ID">
+  <button id="toggleBtn">Start Sharing</button>
+  <div id="status">Not sharing</div>
+
+  <script>
+    let isSharing = false;
+    let watchId = null;
+    const apiEndpoint = 'https://last-5-shp6.onrender.com/update-location';
+
+    function sendLocation(position) {
+      const driverId = document.getElementById('driverId').value;
+      if (!driverId) {
+        document.getElementById('status').textContent = 'Enter Driver ID';
+        return;
+      }
+      const data = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
+        driverId: driverId
+      };
+
+      fetch(apiEndpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer YOUR_DRIVER_TOKEN'
+        },
+        body: JSON.stringify(data)
+      })
+      .then(response => {
+        document.getElementById('status').textContent = response.ok
+          ? 'Location sent'
+          : 'Error sending location';
+      })
+      .catch(() => {
+        document.getElementById('status').textContent = 'Error sending location';
+      });
+    }
+
+    document.getElementById('toggleBtn').addEventListener('click', function() {
+      if (!isSharing) {
+        if (!navigator.geolocation) {
+          document.getElementById('status').textContent = 'Geolocation not supported';
+          return;
+        }
+        watchId = navigator.geolocation.watchPosition(sendLocation, error => {
+          document.getElementById('status').textContent = 'Error getting location';
+        }, { enableHighAccuracy: true, timeout: 5000 });
+        this.textContent = 'Stop Sharing';
+        document.getElementById('status').textContent = 'Sharing location...';
+      } else {
+        navigator.geolocation.clearWatch(watchId);
+        this.textContent = 'Start Sharing';
+        document.getElementById('status').textContent = 'Stopped sharing';
+      }
+      isSharing = !isSharing;
+    });
+  </script>
+</body>
+</html>
